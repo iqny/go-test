@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "./;api";
+package main;
+import public "google/protobuf/timestamp.proto";
+message ListResponse{
+  repeated Order Order = 2;
+}
+
+message Order{
+  int64 Id = 1;
+  string Name = 2;
+  google.protobuf.Timestamp birthday = 3;
+}
+message PageRequest{
+  int64 Page = 1;
+}
+
+service OrderService{
+  rpc List(PageRequest) returns(ListResponse);
+}

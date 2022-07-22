@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "./;main";
+package main;
+import public "google/protobuf/timestamp.proto";
+import public "google/protobuf/duration.proto";
+import public "github.com/gogo/protobuf/gogoproto/gogo.proto";
+message WellKnownTypes{
+  google.protobuf.Timestamp Now = 1 [(gogoproto.jsontag) = "now"];
+  google.protobuf.Duration Took = 2 [(gogoproto.jsontag) = "took"];
+}
