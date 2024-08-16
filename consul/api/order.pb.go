@@ -7,10 +7,10 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
@@ -26,7 +26,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // Timestamp from public import google/protobuf/timestamp.proto
-type Timestamp = timestamppb.Timestamp
+type Timestamp = timestamp.Timestamp
 
 type ListResponse struct {
 	Order                []*Order `protobuf:"bytes,2,rep,name=Order,proto3" json:"Order,omitempty"`
@@ -68,12 +68,12 @@ func (m *ListResponse) GetOrder() []*Order {
 }
 
 type Order struct {
-	Id                   int64                  `protobuf:"varint,1,opt,name=Id,proto3" json:"Id,omitempty"`
-	Name                 string                 `protobuf:"bytes,2,opt,name=Name,proto3" json:"Name,omitempty"`
-	Birthday             *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=birthday,proto3" json:"birthday,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
-	XXX_unrecognized     []byte                 `json:"-"`
-	XXX_sizecache        int32                  `json:"-"`
+	Id                   int64                `protobuf:"varint,1,opt,name=Id,proto3" json:"Id,omitempty"`
+	Name                 string               `protobuf:"bytes,2,opt,name=Name,proto3" json:"Name,omitempty"`
+	Birthday             *timestamp.Timestamp `protobuf:"bytes,3,opt,name=birthday,proto3" json:"birthday,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
 }
 
 func (m *Order) Reset()         { *m = Order{} }
@@ -115,7 +115,7 @@ func (m *Order) GetName() string {
 	return ""
 }
 
-func (m *Order) GetBirthday() *timestamppb.Timestamp {
+func (m *Order) GetBirthday() *timestamp.Timestamp {
 	if m != nil {
 		return m.Birthday
 	}

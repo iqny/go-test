@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"runtime"
+	"strconv"
+	"time"
 )
 
 type User struct {
@@ -70,12 +73,41 @@ func main() {
 	//jm := make(map[string]interface{})
 	jm := new(BaseChannelOrder)
 	json.Unmarshal([]byte(ss), &jm)
-	fmt.Println(jm.ReceiverInfo)
+	tid, _ := strconv.ParseInt(jm.Tid, 10, 64)
+	fmt.Println(tid)
 	/*goods := jm["goods"].([]interface{})[0]
 	g := goods.(map[string]interface{})
 	num, _ := strconv.ParseInt(strconv.FormatFloat(g["num"].(float64), 'f', 0, 64), 10, 64)
 	fmt.Printf("%T", num)
 	fmt.Println(g["price"].(float64))*/
+	st := []*goods{{s: "abx"}}
+
+	name1(st)
+	fmt.Println(st[0])
+	fmt.Println(GetTimeDifference())
+
+	cpuNum := runtime.NumCPU()
+	fmt.Println("cpuNum:", cpuNum)
+	fmt.Printf("%d\n", 0xEB86D391)
+	fmt.Printf("%d\n", 0xFFEFF47D)
+}
+
+func GetTimeDifference() int64 {
+	nowTime := time.Now()
+	nowTimeStamp := nowTime.Unix()
+	nowTimeStr := nowTime.Format("2006-01-02")
+	t2, _ := time.ParseInLocation("2006-01-02", nowTimeStr, time.Local)
+	towTimeStamp := t2.AddDate(0, 0, 1).Unix()
+	fmt.Println(towTimeStamp)
+	fmt.Println(nowTimeStamp)
+	return towTimeStamp - nowTimeStamp
+}
+
+type info struct {
+	ss []*goods `json:"ss"`
+}
+type goods struct {
+	s string
 }
 
 func mapt(m map[string]interface{}) {
@@ -86,4 +118,10 @@ func mapt(m map[string]interface{}) {
 		m["teset"] = ms
 	}
 	fmt.Println(m["teset"])
+}
+
+func name1(gg []*goods) {
+	for _, g := range gg {
+		g.s = "oooooo"
+	}
 }

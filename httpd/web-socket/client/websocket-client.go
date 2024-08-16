@@ -16,6 +16,7 @@ func main() {
 	checkError(err)
 	result := make([]byte, 256)
 	_, err = conn.Read(result)
+	conn.Write([]byte("he"))
 	checkError(err)
 	fmt.Println(string(result))
 	os.Exit(0)

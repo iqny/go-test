@@ -3,17 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/golang/protobuf/ptypes"
 	"go-zh/consul/api"
 	"go-zh/consul/resolver"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/balancer/roundrobin"
 	"log"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
-	conn := NewClietnConn("192.168.99.101:8500", "HelloService")
+	conn := NewClietnConn("127.0.0.1:8500", "HelloService")
 	defer conn.Close()
 	c := api.NewOrderServiceClient(conn)
 	for {
@@ -35,22 +34,23 @@ func main() {
 			goTime, _ := ptypes.Timestamp(pbTimestamp)
 			//设定为系统时区
 			fmt.Println(goTime.Local())*/
-			for _,v:=range r.Order{
-				goTime, _ := ptypes.Timestamp(v.Birthday)
+			for _, v := range r.Order {
+				goTime := v.Birthday.AsTime()
+				//goTime, _ := ptypes.Timestamp(v.Birthday)
 				//设定为系统时区
-				log.Printf("goods: %d,%s,%s",v.Id, v.Name,goTime.Local())
+				log.Printf("goods: %d,%s,%s", v.Id, v.Name, goTime.Local())
 			}
 		}
 		time.Sleep(time.Second)
 	}
 }
-func NewClietnConn(consulAddr,serviceName string) *grpc.ClientConn {
+func NewClietnConn(consulAddr, serviceName string) *grpc.ClientConn {
 	schema, err := resolver.GenerateAndRegisterConsulResolver(consulAddr, serviceName)
 	if err != nil {
 		log.Fatal("init consul resovler err", err.Error())
 	}
 	//建立连接
-	conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", schema,serviceName), grpc.WithInsecure(), grpc.WithBalancerName(roundrobin.Name))
+	conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", schema, serviceName), grpc.WithInsecure(), grpc.WithDisableServiceConfig())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
